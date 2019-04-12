@@ -13,6 +13,11 @@ void PID::Init(double Kp_, double Ki_, double Kd_) {
    * TODO: Initialize PID coefficients (and errors, if needed)
    */
 
+  this->Kp = Kp_;
+  this->Ki = Ki_;
+  this->Kd = Kd_;
+  this->pre_cte = 0.0;
+  this->int_cte = 0.0;
 }
 
 void PID::UpdateError(double cte) {
