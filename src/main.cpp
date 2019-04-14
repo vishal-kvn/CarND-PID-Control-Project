@@ -34,10 +34,15 @@ int main() {
   uWS::Hub h;
 
   PID pid;
-  //pid.Init(0.4, 0.004, 6.0); // 1. completes entire loop. Curves are jerky.
-  //pid.Init(0.4, 0.006, 8.0); // completes entire loop. Curves are more jerky compared to 1.
-  //pid.Init(0.4, 0.002, 8.0); // completes entire loop. Curves are jerky similar to 1.
-  pid.Init(0.2, 0.002, 8.0); // completes entire loop. Curves are much smoother compared to 1.
+  //pid.Init(0.2, 0.004, 3.0); // throttle:0.3 Starting values from the course example.
+  //pid.Init(0.4, 0.004, 6.0); // throttle:0.3 completes entire loop.
+  //pid.Init(0.2, 0.002, 8.0); // throttle:0.7 completes entire loop. Lot of ossiclations, car doesn't stay on track near curves, sharp turns.
+  //pid.Init(0.1, 0.002, 8.0); // throttle:0.7 Spins out of track.
+  //pid.Init(0.1, 0.005, 6.0); // throttle:0.7 Spins out of track.
+  //pid.Init(0.12, 0.001, 3.5); // throttle:0.7 Completes the tracks.
+  //pid.Init(0.125, 0.001, 3.2); // throttle:0.7 Completes the tracks, ossiclates vigoursly.
+  pid.Init(0.125, 0.001, 3.8); // throttle:0.7 Completes the tracks.
+  //pid.Init(0.12, 0.002, 3.7); // throttle:0.7 Completes tracks, sharper turns.
 
   int count = 0;
   /**
@@ -85,7 +90,7 @@ int main() {
           json msgJson;
           //msgJson["steering_angle"] = angle + steer_value;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.3;
+          msgJson["throttle"] = 0.7;
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           std::cout << "###############################"<< std::endl;
