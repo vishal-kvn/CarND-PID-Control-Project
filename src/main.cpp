@@ -36,13 +36,7 @@ int main() {
   PID pid;
   //pid.Init(0.2, 0.004, 3.0); // throttle:0.3 Starting values from the course example.
   //pid.Init(0.4, 0.004, 6.0); // throttle:0.3 completes entire loop.
-  //pid.Init(0.2, 0.002, 8.0); // throttle:0.7 completes entire loop. Lot of ossiclations, car doesn't stay on track near curves, sharp turns.
-  //pid.Init(0.1, 0.002, 8.0); // throttle:0.7 Spins out of track.
-  //pid.Init(0.1, 0.005, 6.0); // throttle:0.7 Spins out of track.
-  //pid.Init(0.12, 0.001, 3.5); // throttle:0.7 Completes the tracks.
-  //pid.Init(0.125, 0.001, 3.2); // throttle:0.7 Completes the tracks, ossiclates vigoursly.
-  pid.Init(0.125, 0.001, 3.8); // throttle:0.7 Completes the tracks.
-  //pid.Init(0.12, 0.002, 3.7); // throttle:0.7 Completes tracks, sharper turns.
+  pid.Init(0.118, 0.001, 4.5); // throttle:0.7 completes entire loop.
 
   int count = 0;
   /**
@@ -54,6 +48,8 @@ int main() {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
+    //double throttle = 0.3;
+    double throttle = 0.7;
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(string(data).substr(0, length));
 
@@ -90,7 +86,11 @@ int main() {
           json msgJson;
           //msgJson["steering_angle"] = angle + steer_value;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.7;
+          if((fabs(steer_value) > 0.3) && (count > 1000)) {
+            msgJson["throttle"] = throttle - 0.05;
+          } else {
+            msgJson["throttle"] = throttle;
+          }
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           std::cout << "###############################"<< std::endl;
